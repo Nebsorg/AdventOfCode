@@ -61,7 +61,7 @@ def star1(layout, screen):
         else:
             layout = newLayout
             iteration +=1
-        time.sleep(.100)
+        time.sleep(.0500)
         drawLayout(layout, screen)
     return(countOccupiedSeat(layout), iteration)
 
@@ -82,7 +82,7 @@ def star2(layout, screen):
         else:
             layout = newLayout
             iteration +=1
-        time.sleep(.100)
+        time.sleep(.0500)
         drawLayout(layout, screen)
     return(countOccupiedSeat(layout), iteration)
 
@@ -100,6 +100,7 @@ def drawLayout(layout, screen):
                 color = (255,255,255)
             pygame.draw.rect(screen, color, (x * xShift, y * yShift, xShift, yShift))
     pygame.display.flip()
+    pygame.event.pump()
 
 def getLayout():
     layout = []
@@ -117,7 +118,7 @@ def main():
     # load and set the logo
     #logo = pygame.image.load(directoryPath+"/logo32x32.png")
     #pygame.display.set_icon(logo)
-    pygame.display.set_caption("Advent Of Code - Day 11 - Star 2")
+    pygame.display.set_caption("Advent Of Code - Day 11")
 
     # create a surface on screen that has the size of 240 x 180
     screen = pygame.display.set_mode((windowsWidth,windowsHeight))
@@ -140,9 +141,18 @@ def main():
                 # change the value to False, to exit the main loop
                 running = False
             if event.type == pygame.KEYUP:
-                result, iteration = star2(layout, screen)
-                print(f"star2: {result} ({iteration} iteration)")
-                pygame.display.set_caption(f"Advent Of Code - Day 11 - Star 2: {result} ({iteration} iteration)")
+                if event.key == pygame.K_UP:
+                    pygame.display.set_caption("Advent Of Code - Day 11 - Star 2")
+                    result, iteration = star2(layout, screen)
+                    print(f"star2: {result} ({iteration} iteration)")
+                    pygame.display.set_caption(f"Advent Of Code - Day 11 - Star 2: {result} ({iteration} iteration)")
+                    pygame.event.clear()
+                elif event.key == pygame.K_DOWN:
+                    pygame.display.set_caption("Advent Of Code - Day 11 - Star 1")
+                    result, iteration = star1(layout, screen)
+                    print(f"star2: {result} ({iteration} iteration)")
+                    pygame.display.set_caption(f"Advent Of Code - Day 11 - Star 1: {result} ({iteration} iteration)")
+                    pygame.event.clear()
 
 
 
