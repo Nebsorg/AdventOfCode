@@ -46,46 +46,36 @@ def star(initial_seeds, instructions, starID):
         # print(f"level {i} starting with {len(current_seeds)} seeds")
         level_matches = instructions[level]
         new_seeds = []
-        for rule in level_matches:
-            # print(f"level {i} : applying rule {rule} to {current_seeds}")
-            rule_seeds = copy.deepcopy(current_seeds)
-            while (len(rule_seeds) > 0):
-                seed = rule_seeds.pop()
-                # print(f"level {i} : checking rule {rule} on seed {seed}")
-
-                ## Is there an intersection with the current mapping ?
+        while len(current_seeds) > 0:
+            seed = current_seeds.pop()
+            for rule in level_matches:
+                # print(f"level {i} : checking seed {seed} and rule {rule}")
+                
                 mapping_range_min = rule[1]
                 mapping_range_max = rule[1] + rule[2] - 1
                 intersection = interval_intersection(seed,[mapping_range_min,mapping_range_max])
 
                 if len(intersection) > 0:
-                    #print(f"  --> Intersection found {intersection} on seed {seed} and rule {[mapping_range_min,mapping_range_max]}")
-                    ## intersection found, treating this intersection : 
-                    #       - remove current seed from list of seed
-                    #       - adding transformed part to new seed
-                    #       - add untouched part of current seed in list of seed
-                    current_seeds.remove(seed)
+                    # print(f"  --> Intersection found {intersection} on seed {seed} and rule {[mapping_range_min,mapping_range_max]}")
                     ## applying the transformation to the intersection : 
                     new_min = intersection[0] - (rule[1] - rule[0])
                     new_max = intersection[1] - (rule[1] - rule[0])
                     new_seeds.append([new_min, new_max])
-                    #print(f"  --> Transforming intersection {intersection} in {[new_min, new_max]}")
+                    # print(f"  --> Transforming intersection {intersection} in {[new_min, new_max]}")
 
-                    ## if some part of the seed range is not touched by the rule, adding to the seed to check for the rest of rules
+                    ## if some part of the seed range is not touched by the rule, adding to the seed to check if it match others rules
                     new_intervals = cut_interval_with_interval(seed,[mapping_range_min,mapping_range_max])
                     for interval in new_intervals:
                         if interval != intersection:
                             current_seeds.append(interval)
-                            #print(f"  --> Adding untransformed part of seed {seed} to seed to check {interval}")
-                    
-
-        ## once all the rules have been applied, adding remaining seed of current seed to new seeds
-        #print(f"  --> Adding untransformed seed to next level {current_seeds}")
-        new_seeds.extend(current_seeds)
-        
+                            # print(f"  --> Adding untransformed part of seed {seed} to seed to check {interval}")
+                    break
+            else:
+                ## no rule matches, adding the current seed untouched
+                new_seeds.append(seed)
+                #print(f"  --> NO Intersection found - new seed = {new_seeds}")
         current_seeds = copy.deepcopy(new_seeds)
-        #print(f"level {i} completed : new seed={len(current_seeds)}")
-
+        # print(f"level {i} completed : new seed={len(current_seeds)}")
     borne_inf = min([d[0] for d in current_seeds])
     print(f"****** {starID} Star = {borne_inf}")
 
