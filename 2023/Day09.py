@@ -18,24 +18,15 @@ def readInstruction(file):
 def evaluate(vector):
     levels = {}
     depth = 0
-    finished = False
     levels[depth] = list(vector)
     ## top -> down to reach '0' line
-    while not finished:
+    while sum(levels[depth]) != 0:
         current_vector = levels[depth]
-        for val in current_vector:
-            if val != 0:
-                break
-        else:
-            ## all 0
-            finished = True
-
-        if not finished:
-            depth += 1
-            next_vector = []
-            for i in range(len(current_vector)-1):
-                next_vector.append(current_vector[i+1]-current_vector[i])
-            levels[depth] = next_vector
+        depth += 1
+        next_vector = []
+        for i in range(len(current_vector)-1):
+            next_vector.append(current_vector[i+1]-current_vector[i])
+        levels[depth] = next_vector
     #print(f"Vector {vector} -- Bottom reached in {depth} steps --> {levels}")
 
     ## bottom -> up
