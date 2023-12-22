@@ -1,10 +1,7 @@
 from datetime import datetime
-import re
 from tools import Style
 from tools import interval_intersection
-from collections import defaultdict
-import copy
-from collections import deque
+import json
 
 #### Main
 print(f"{Style.RED}2023 --- Day 22: Sand Slabs ---{Style.RESET}")
@@ -17,7 +14,7 @@ def readInstruction(file):
     for i, line in enumerate(f):
         x1,y1,z1 = list(map(int,line.split('~')[0].split(',')))
         x2,y2,z2 = list(map(int,line.split('~')[1].split(',')))
-        bricks[i+1] = [x1,x2,y1,y2,z1,z2]
+        bricks[str(i+1)] = [x1,x2,y1,y2,z1,z2]
 
     return(bricks)
 
@@ -40,7 +37,7 @@ def fallBrick(id, bricks):
             for subbrick in below_bricks:
                 sb_x1, sb_x2, sb_y1, sb_y2, sb_z1, sb_z2 = bricks[subbrick]
 
-                if len(interval_intersection([x1, x2], [sb_x1, sb_x2]))>0 and len(interval_intersection([y1,y2], [sb_y1, sb_y2])):
+                if len(interval_intersection([x1, x2], [sb_x1, sb_x2]))>0 and len(interval_intersection([y1,y2], [sb_y1, sb_y2]))>0:
                     return(current_z)
             current_z -= 1
         else:
@@ -48,7 +45,6 @@ def fallBrick(id, bricks):
 
 def stabilize(bricks):
     bottom_levels = set([b[4] for b in bricks.values()])
-    top_levels = set([b[5] for b in bricks.values()])
 
     fallenbricks = []
 
@@ -74,8 +70,10 @@ def stars(bricks):
 
     fallenbricks = stabilize(bricks)
 
+    save_world = json.dumps(bricks)
+
     for id, realbrick in bricks.items():
-        without = copy.deepcopy(bricks)
+        without = json.loads(save_world)
         del without[id]
 
         fallenbricks = stabilize(without)
