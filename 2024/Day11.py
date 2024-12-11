@@ -32,8 +32,7 @@ def applyRule(stoneId):
 
 def blink(stones):
     new_stones = defaultdict(lambda: 0)
-    for stoneId in stones.keys():
-        occurence = stones[stoneId]
+    for stoneId, occurence in stones.items():
         if occurence > 0:
             newIds = applyRule(stoneId)
             for newId in newIds:
