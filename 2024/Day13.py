@@ -28,30 +28,27 @@ def readInstruction(file):
     return(instructions)
 
 def getPush(machine):
-    button_A = machine[0]
-    button_B = machine[1]
-    target = machine[2]
+    button_A = machine[0]  # xa, ya
+    button_B = machine[1]  # xb, yb
+    target = machine[2]    # xt, yt
     
     ## resolution du systeme de 2 equations à 2 inconnnus
     # xt = na*xa + nb*xb
     # yt = na*Ya + nb*yb
-    # na = (xt-nb*xb)/xa
     # nb = (yt*xa - xt*ya) / (yb*xa - xb*ya)
-    # solution si nb et na sont entiers, on test au 3eme digit
+    # na = (xt-nb*xb)/xa    
+    # solution si nb et na sont entiers (ie le reste de la division euclidienne vaut 0)
 
-    push_b = (target[1]*button_A[0] - target[0]*button_A[1]) / (button_B[1] * button_A[0] - button_B[0]*button_A[1])
+    push_b, reste = divmod(target[1]*button_A[0] - target[0]*button_A[1], button_B[1] * button_A[0] - button_B[0]*button_A[1])
 
-    if int(push_b*1000) != round(push_b,0)*1000:
-        #print(f"machine {machine} - push_b={push_b} --> pas entier, on quitte")
+    if reste != 0:
         return(None)
-    push_b = int(push_b)
-
-    push_a = (target[0]-push_b*button_B[0])/button_A[0]
-    if int(push_a*1000) != round(push_a,0)*1000:
-        #print(f"machine {machine} - push_a={push_a} --> pas entier, on quitte")
+    
+    push_a, reste = divmod(target[0]-push_b*button_B[0], button_A[0])
+    if reste != 0:
         return(None)
 
-    return(int(push_a), int(push_b))
+    return(push_a, push_b)
 
 def stars(instructions):
     star1 = 0
