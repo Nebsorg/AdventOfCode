@@ -41,6 +41,7 @@ def readInstruction(file):
     #robots[0] = [2,4,2,-3]
     return([(max_x, max_y), robots])
 
+
 def evaluate(max_x, max_y, robots):
 
     quadrants = [0,0,0,0]

@@ -1,17 +1,10 @@
 from datetime import datetime
-from collections import defaultdict
-from operator import mul
-from functools import reduce
 import copy
-import re
-import numpy as np
 from collections import deque
 
 #### Main
 print(f"2024 --- Day 16: Reindeer Maze ---")
 start_time = datetime.now()
-
-regexp = "-?\d+"
 
 def display(start, end, maze, path):
     for i in range(len(maze)):

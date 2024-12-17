@@ -1,16 +1,9 @@
 from datetime import datetime
-from collections import defaultdict
-from operator import mul
-from functools import reduce
 import copy
-import re
-import numpy as np
 
 #### Main
-print(f"2024 --- Day 14: Restroom Redoubt ---")
+print(f"2024 --- Day 15: Warehouse Woes ---")
 start_time = datetime.now()
-
-regexp = "-?\d+"
 
 def display(max_line, max_col, robot, boxes, walls):
     for i in range(max_line):
@@ -173,12 +166,8 @@ def moveRobot2(robot, boxes, walls, direction):
         for pos in spaces:
             occupied[(pos[0], pos[1])] = id
 
-    #print(boxes)
-    #print(occupied)
     pos_to_check = [[robot[0]+direction[0], robot[1] + direction[1]]]
     encounteredBoxes = set()
-    
-    finished = False
         
     while len(pos_to_check) > 0:
         pos = pos_to_check.pop()
@@ -199,9 +188,6 @@ def moveRobot2(robot, boxes, walls, direction):
             else:
                 ## deplacement horizontal
                 pos_to_check.append([pos[0]+direction[0], pos[1] + direction[1]])
-        else:
-            ## on est ni dans un mur, ni dans un boite -> c'est vide, on peut se deplacer
-            finished = True
 
     ## on deplace le robot et toutes les boites croisées
     robot[0] += direction[0]
@@ -229,13 +215,13 @@ def star1(fileToOpen):
     while len(directions) > 0:
         direction = directions.pop(0)
         moveRobot(robot, boxes, walls, direction)
-    
+    display(max_row, max_col, robot, boxes, walls)
+
     star1 = sum([box[0]*100+box[1] for box in boxes])
     print(f"****** First Star = {star1}")
 
 def star2(fileToOpen):
     instructions = readInstructionStar2(fileToOpen)
-    print(instructions)
     
     max_row = instructions[0][0]
     max_col = instructions[0][1]
@@ -255,7 +241,7 @@ def star2(fileToOpen):
 
 
 fileToOpen = "./Day15.txt"
-#star1(fileToOpen)
+star1(fileToOpen)
 star2(fileToOpen)
 
 end_time = datetime.now()

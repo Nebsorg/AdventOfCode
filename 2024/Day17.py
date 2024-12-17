@@ -1,19 +1,12 @@
 from datetime import datetime
-from collections import defaultdict
-import re
-import math
 
 #### Main
 print(f"2024 --- Day 17: Chronospatial Computer ---")
 start_time = datetime.now()
 
-regexp = "X.(?P<X>\d+), Y.(?P<Y>\d+)"
-
 def readInstruction(file):
     f = open(file, "r")
-    instructions = {}
     ## read all instruction : 
-
     for i,line in enumerate(f):
         line = line.rstrip()
         if i == 0:
@@ -94,8 +87,6 @@ def getDigits(reg_a,reg_b,reg_c,program, depth):
     ## chaque modulo 8 renvoie un digit supplementaire
     ## il faut donc trouver tous les digits par pas de 8
 
-    _,_,_, output = executeProgram(reg_a, reg_b, reg_c, program)
-    
     candidates = []
     for a in range(8):
         _,_,_, output = executeProgram(reg_a+a, reg_b, reg_c, program)
